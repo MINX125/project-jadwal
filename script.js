@@ -49,13 +49,44 @@ function tampilkanJadwal() {
     out.innerHTML = "";
     
     if(!jadwalKelas[k] || !jadwalKelas[k][h]) return;
-    
+
+    // Ambil jam sekarang
+    const sekarang = new Date();
+    const jamMenitSekarang = sekarang.getHours() * 60 + sekarang.getMinutes();
+
     jamConfig[h].forEach(p => {
         let info = p.s ? ketPelajaran[p.s] : (daftarGuru[jadwalKelas[k][h][p.i]] || "Kode " + (jadwalKelas[k][h][p.i] || "-"));
+        
+        // Logika Deteksi Pelajaran Aktif
+        let isActive = false;
+        const range = p.w.split('-'); // Pecah "07.00-08.00" jadi ["07.00", "08.00"]
+        
+        const mulai = range[0].split('.');
+        const selesai = range[1].split('.');
+        
+        const menitMulai = parseInt(mulai[0]) * 60 + parseInt(mulai[1]);
+        const menitSelesai = parseInt(selesai[0]) * 60 + parseInt(selesai[1]);
+
+        if (jamMenitSekarang >= menitMulai && jamMenitSekarang < menitSelesai) {
+            isActive = true;
+        }
+
         let cls = p.s ? "card special" : "card";
-        out.innerHTML += `<div class="${cls}"><div class="time">${p.w}</div><div class="desc">${info}</div></div>`;
+        if (isActive) cls += " active-now"; // Tambah class khusus jika sedang berlangsung
+
+        out.innerHTML += `
+            <div class="${cls}">
+                <div class="time">
+                    ${isActive ? "<b>● SEKARANG</b>" : p.w}
+                </div>
+                <div class="desc">
+                    ${info}
+                    ${isActive ? "<br><small style='color: #00ff00;'>Sedang Berlangsung</small>" : ""}
+                </div>
+            </div>`;
     });
 }
+
 
 // Fitur Rahasia
 function rahasia() {
