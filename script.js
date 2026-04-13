@@ -24,13 +24,13 @@ async function loadData() {
         if (localJadwal) {
             jadwalKelas = JSON.parse(localJadwal);
         } else {
-            const jadwalRes = await fetch('file-file/jadwal.json');
+            const jadwalRes = await fetch('file/jadwal.json');
             jadwalKelas = await jadwalRes.json();
         }
         
         initDropdown();
     } catch (e) {
-        console.error("Gagal load data. Pastikan folder 'file-file' sudah benar!");
+        console.error("Gagal load data. Pastikan folder 'file' sudah benar!");
     }
 }
 
