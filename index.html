@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Digital SMPN 1 Diwek</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <h3 style="text-align:center; margin-top:0;">JADWAL SEKOLAH</h3>
+            <h3 onclick="rahasia()" style="text-align:center; margin-top:0; cursor:pointer;"> SMPN 1 DIWEK</h3>
+            <label>Pilih Kelas:</label>
+            <select id="kelas"></select>
+            <label>Pilih Hari:</label>
+            <select id="hari">
+                <option>Senin</option><option>Selasa</option><option>Rabu</option><option>Kamis</option><option>Jumat</option>
+            </select>
+            <button onclick="tampilkanJadwal()">TAMPILKAN JADWAL</button>
+    <div id="output"></div>
+</div> <footer style="text-align: center; margin-top: 30px; padding: 20px; color: gray; font-size: 0.8em; border-top: 1px solid #30363d;">
+    <p style="margin: 5px 0;">Developed by <b>M. Khoirul Fahmi</b></p>
+    <p style="margin: 0;">Class VIIIC - SMP Negeri 1 Diwek</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

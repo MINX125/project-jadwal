@@ -1,0 +1,87 @@
+:root { 
+    --bg: #0d1117; 
+    --card: #161b22; 
+    --primary: #58a6ff; 
+    --accent: #bc8cff; 
+    --text: #c9d1d9; 
+    --orange: #f0883e; 
+}
+
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background: var(--bg); 
+    color: var(--text); 
+    margin: 0; 
+    padding: 15px; 
+}
+
+.container { max-width: 500px; margin: auto; }
+
+.box { 
+    background: var(--card); 
+    padding: 20px; 
+    border-radius: 12px; 
+    border: 1px solid #30363d; 
+    margin-bottom: 20px; 
+    position: sticky; 
+    top: 10px; 
+    z-index: 10; 
+}
+
+select, button { 
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 8px; 
+    margin-top: 10px; 
+    font-weight: bold; 
+    border: 1px solid #30363d; 
+}
+
+select { background: #0d1117; color: white; }
+
+button { 
+    background: var(--accent); 
+    color: white; 
+    border: none; 
+    cursor: pointer; 
+}
+
+.card { 
+    background: var(--card); 
+    border-left: 5px solid var(--accent); 
+    padding: 12px; 
+    margin-bottom: 8px; 
+    display: flex; 
+    align-items: center; /* Membuat teks rata tengah secara vertikal */
+    border-radius: 4px;
+    gap: 10px; /* Memberi jarak antara jam dan nama */
+}
+
+.card.special { border-left-color: var(--orange); background: #1c1c1c; }
+
+.time { 
+    color: var(--primary); 
+    font-size: 0.85em; 
+    width: 95px; /* Lebar tetap untuk jam agar rapi */
+    flex-shrink: 0; /* Mencegah kolom jam menyempit */
+    font-weight: bold; 
+}
+
+.desc { 
+    flex-grow: 1; 
+    font-size: 0.9em; 
+    line-height: 1.2; /* Mengatur jarak antar baris jika nama turun ke bawah */
+    word-wrap: break-word; /* Memastikan kata panjang tidak keluar kotak */
+    color: #ffffff;
+}
+
+/* Footer agar tidak mengganggu layout */
+footer {
+    text-align: center; 
+    margin-top: 30px; 
+    padding: 20px; 
+    color: gray; 
+    font-size: 0.8em; 
+    border-top: 1px solid #30363d;
+    clear: both; /* Memastikan footer berada paling bawah */
+}
