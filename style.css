@@ -85,3 +85,27 @@ footer {
     border-top: 1px solid #30363d;
     clear: both; /* Memastikan footer berada paling bawah */
 }
+
+/* Efek kartu yang sedang aktif */
+.card.active-now {
+    border-left: 8px solid #00ff00 !important; /* Warna hijau menyala */
+    background: linear-gradient(90deg, #1a2a1a 0%, #0d1117 100%);
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.card.active-now .time {
+    color: #00ff00 !important;
+}
+
+/* Animasi kedip sedikit pada tulisan SEKARANG */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.active-now b {
+    animation: pulse 1.5s infinite;
+}
