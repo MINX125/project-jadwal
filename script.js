@@ -111,4 +111,14 @@ function rahasia() {
     }
 }
 
+function toggleTheme() {
+    const isChecked = document.getElementById('checkbox').checked;
+    if (isChecked) {
+        document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+}
+
+
 window.onload = loadData;
