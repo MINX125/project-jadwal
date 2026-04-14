@@ -64,10 +64,19 @@ function tampilkanJadwal() {
     // ---------------------------
 
     jamConfig[h].forEach(p => {
-        let kodeGuru = jadwalKelas[k][h][p.i];
-        let info = p.s ? p.s : (daftarGuru[kodeGuru] || "Kode " + (kodeGuru || "-"));
-        
-        let isActive = false;
+    let kodeGuru = jadwalKelas[k][h][p.i];
+    let info = "";
+
+    // Logika buat ngerapiin teks spesial
+    if (p.s) {
+        if (p.s == "1") info = "UPACARA / DHUHA";
+        else if (p.s == "2") info = "ISTIRAHAT 1";
+        else if (p.s == "3") info = "ISTIRAHAT 2";
+        else info = p.s;
+    } else {
+        info = daftarGuru[kodeGuru] || "Kode " + (kodeGuru || "-");
+    }
+
         
         // Cek apakah hari di HP sama dengan hari yang dipilih di dropdown
         if (namaHariSekarang === h) { 
