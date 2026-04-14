@@ -127,6 +127,61 @@ function tampilkanJadwal() {
             </div>`;
     });
 }
+function modeGuruLive() {
+    const out = document.getElementById('output');
+    out.innerHTML = "<h3 style='text-align:center; color:var(--accent); margin-bottom:20px;'>🕵️ Live Tracking Semua Kelas</h3>";
+    
+    const sekarang = new Date();
+    const jamMenitSekarang = sekarang.getHours() * 60 + sekarang.getMinutes();
+    const daftarHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const namaHariSekarang = daftarHari[sekarang.getDay()];
+
+    // Cek apakah ini hari sekolah
+    if (namaHariSekarang === "Minggu" || namaHariSekarang === "Sabtu") {
+        out.innerHTML += "<p style='text-align:center;'>Sekarang hari libur, tidak ada KBM.</p>";
+        return;
+    }
+
+    // Ambil daftar semua kelas dan urutkan
+    const semuaKelas = Object.keys(jadwalKelas).sort();
+
+    semuaKelas.forEach(namaKelas => {
+        let pelajaranSekarang = "Selesai / Pulang";
+        let jamAktif = "";
+
+        // Cari pelajaran yang jamnya cocok sekarang di kelas ini
+        jamConfig[namaHariSekarang].forEach((p, index) => {
+            const range = p.w.split('-');
+            const mulai = range[0].split('.');
+            const selesai = range[1].split('.');
+            const m = parseInt(mulai[0]) * 60 + parseInt(mulai[1]);
+            const s = parseInt(selesai[0]) * 60 + parseInt(selesai[1]);
+
+            if (jamMenitSekarang >= m && jamMenitSekarang < s) {
+                jamAktif = p.w;
+                if (p.s) {
+                    pelajaranSekarang = p.s;
+                } else if ((namaHariSekarang === "Rabu" || namaHariSekarang === "Kamis" || namaHariSekarang === "Jumat") && index >= jamConfig[namaHariSekarang].length - 2) {
+                    pelajaranSekarang = "KOKURIKULER";
+                } else {
+                    let kode = jadwalKelas[namaKelas][namaHariSekarang][p.i];
+                    pelajaranSekarang = daftarGuru[kode] || "Kode " + kode;
+                }
+            }
+        });
+
+        // Tampilkan hasil scanning per kelas
+        out.innerHTML += `
+            <div class="card" style="margin-bottom: 8px; border-left: 5px solid var(--accent);">
+                <div class="time" style="min-width: 60px;">${namaKelas}</div>
+                <div class="desc">
+                    <small style="color:var(--text-dim)">${jamAktif || "Luar Jam KBM"}</small><br>
+                    <b>${pelajaranSekarang}</b>
+                </div>
+            </div>`;
+    });
+}
+
 
 function toggleTheme() {
     const isChecked = document.getElementById('checkbox').checked;
