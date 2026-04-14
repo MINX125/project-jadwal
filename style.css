@@ -120,6 +120,22 @@ select {
     color: var(--accent);
     min-width: 90px;
 }
+/* Card khusus (Istirahat, Dhuha, Upacara, dll) */
+.card.special {
+    background: linear-gradient(145deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.card.special .time {
+    color: #ffd700 !important; /* Warna Emas */
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.card.special .desc {
+    color: #ffd700;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
 
 /* Switch Tema CSS */
 .theme-switch-wrapper {
