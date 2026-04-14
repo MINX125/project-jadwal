@@ -21,6 +21,33 @@
     --card-border: #d0d7de;
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
 }
+/* Tombol Tampilkan Jadwal Modern */
+button, .btn-tampilkan {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), #3a86ff);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(88, 166, 255, 0.4);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(88, 166, 255, 0.6);
+}
+
+button:active {
+    transform: translateY(0);
+}
 
 * {
     box-sizing: border-box;
