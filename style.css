@@ -1,111 +1,138 @@
-:root { 
-    --bg: #0d1117; 
-    --card: #161b22; 
-    --primary: #58a6ff; 
-    --accent: #bc8cff; 
-    --text: #c9d1d9; 
-    --orange: #f0883e; 
+:root {
+    /* Tema Gelap (Default) */
+    --bg-body: #0d1117;
+    --bg-container: rgba(22, 27, 34, 0.8);
+    --text-main: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --card-bg: rgba(33, 38, 45, 0.5);
+    --card-border: #30363d;
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7);
 }
 
-body { 
-    font-family: 'Segoe UI', sans-serif; 
-    background: var(--bg); 
-    color: var(--text); 
-    margin: 0; 
-    padding: 15px; 
+[data-theme="light"] {
+    /* Tema Terang */
+    --bg-body: #f0f2f5;
+    --bg-container: rgba(255, 255, 255, 0.85);
+    --text-main: #1f2328;
+    --text-dim: #636c76;
+    --accent: #0969da;
+    --card-bg: #ffffff;
+    --card-border: #d0d7de;
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
 }
 
-.container { max-width: 500px; margin: auto; }
-
-.box { 
-    background: var(--card); 
-    padding: 20px; 
-    border-radius: 12px; 
-    border: 1px solid #30363d; 
-    margin-bottom: 20px; 
-    position: sticky; 
-    top: 10px; 
-    z-index: 10; 
-}
-
-select, button { 
-    width: 100%; 
-    padding: 12px; 
-    border-radius: 8px; 
-    margin-top: 10px; 
-    font-weight: bold; 
-    border: 1px solid #30363d; 
-}
-
-select { background: #0d1117; color: white; }
-
-button { 
-    background: var(--accent); 
-    color: white; 
-    border: none; 
-    cursor: pointer; 
-}
-
-.card { 
-    background: var(--card); 
-    border-left: 5px solid var(--accent); 
-    padding: 12px; 
-    margin-bottom: 8px; 
-    display: flex; 
-    align-items: center; /* Membuat teks rata tengah secara vertikal */
-    border-radius: 4px;
-    gap: 10px; /* Memberi jarak antara jam dan nama */
-}
-
-.card.special { border-left-color: var(--orange); background: #1c1c1c; }
-
-.time { 
-    color: var(--primary); 
-    font-size: 0.85em; 
-    width: 95px; /* Lebar tetap untuk jam agar rapi */
-    flex-shrink: 0; /* Mencegah kolom jam menyempit */
-    font-weight: bold; 
-}
-
-.desc { 
-    flex-grow: 1; 
-    font-size: 0.9em; 
-    line-height: 1.2; /* Mengatur jarak antar baris jika nama turun ke bawah */
-    word-wrap: break-word; /* Memastikan kata panjang tidak keluar kotak */
-    color: #ffffff;
-}
-
-/* Footer agar tidak mengganggu layout */
-footer {
-    text-align: center; 
-    margin-top: 30px; 
-    padding: 20px; 
-    color: gray; 
-    font-size: 0.8em; 
-    border-top: 1px solid #30363d;
-    clear: both; /* Memastikan footer berada paling bawah */
-}
-
-/* Efek kartu yang sedang aktif */
-.card.active-now {
-    border-left: 8px solid #00ff00 !important; /* Warna hijau menyala */
-    background: linear-gradient(90deg, #1a2a1a 0%, #0d1117 100%);
-    transform: scale(1.02);
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+* {
+    box-sizing: border-box;
     transition: all 0.3s ease;
 }
 
-.card.active-now .time {
-    color: #00ff00 !important;
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
 }
 
-/* Animasi kedip sedikit pada tulisan SEKARANG */
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: var(--bg-container);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: var(--glass-shadow);
 }
 
-.active-now b {
-    animation: pulse 1.5s infinite;
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 25px;
+    color: var(--accent);
 }
+
+/* Dropdown Modern */
+.form-group { margin-bottom: 15px; }
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    color: var(--text-main);
+    font-size: 16px;
+    outline: none;
+}
+
+/* Card Jadwal Modern */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.card.active-now {
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 15px rgba(88, 166, 255, 0.3);
+    background: linear-gradient(145deg, var(--card-bg), rgba(88, 166, 255, 0.1));
+}
+
+.time {
+    font-weight: bold;
+    font-size: 14px;
+    color: var(--accent);
+    min-width: 90px;
+}
+
+/* Switch Tema CSS */
+.theme-switch-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+.theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+}
+.theme-switch input { display: none; }
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border-radius: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 5px;
+}
+.slider:before {
+    background-color: white;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+    border-radius: 50%;
+    z-index: 2;
+}
+input:checked + .slider { background-color: var(--accent); }
+input:checked + .slider:before { transform: translateX(26px); }
+.icon { font-size: 14px; }
