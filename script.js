@@ -4,10 +4,22 @@ let jamConfig = {};
 
 async function loadData() {
     try {
+        // Nama folder sudah diganti menjadi 'file'
         const guruRes = await fetch('./file/guru.json');
-        daftarGuru = await guruRes.json();
         const jadwalRes = await fetch('./file/jadwal.json');
+        
+        if (!guruRes.ok || !jadwalRes.ok) throw new Error("File JSON tidak ditemukan di folder 'file'");
+
+        daftarGuru = await guruRes.json();
         jadwalKelas = await jadwalRes.json();
+        
+        // ... (sisanya jamConfig tetap sama)
+        console.log("Data Berhasil di-load dari folder file!");
+    } catch (e) {
+        alert("Gagal memuat data! Pastikan folder bernama 'file' dan berisi guru.json serta jadwal.json");
+        console.error(e);
+    }
+}
         
         jamConfig = {
             "Senin": [
