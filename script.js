@@ -4,22 +4,17 @@ let jamConfig = {};
 
 async function loadData() {
     try {
-        // Nama folder sudah diganti menjadi 'file'
         const guruRes = await fetch('./file/guru.json');
         const jadwalRes = await fetch('./file/jadwal.json');
         
-        if (!guruRes.ok || !jadwalRes.ok) throw new Error("File JSON tidak ditemukan di folder 'file'");
+        if (!guruRes.ok || !jadwalRes.ok) throw new Error("File tidak ditemukan");
 
         daftarGuru = await guruRes.json();
         jadwalKelas = await jadwalRes.json();
         
-        // ... (sisanya jamConfig tetap sama)
-        console.log("Data Berhasil di-load dari folder file!");
-    } catch (e) {
-        alert("Gagal memuat data! Pastikan folder bernama 'file' dan berisi guru.json serta jadwal.json");
-        console.error(e);
-    }
-}
+        // --- INI PENTING ---
+        // Mengisi dropdown kelas secara otomatis berdasarkan data di jadwal.json
+        isiOpsiKelas();
         
         jamConfig = {
             "Senin": [
@@ -66,16 +61,28 @@ async function loadData() {
     } catch (e) { console.error("Gagal load data"); }
 }
 
+function isiOpsiKelas() {
+    const pilihKelas = document.getElementById('kelas');
+    if (!pilihKelas) return;
+    
+    pilihKelas.innerHTML = ""; 
+    const daftarKelas = Object.keys(jadwalKelas).sort();
+
+    daftarKelas.forEach(namaKelas => {
+        const opt = document.createElement('option');
+        opt.value = namaKelas;
+        opt.innerHTML = "Kelas " + namaKelas;
+        pilihKelas.appendChild(opt);
+    });
+}
+
 function tampilkanJadwal() {
     const k = document.getElementById('kelas').value;
     const h = document.getElementById('hari').value;
     const out = document.getElementById('output');
     out.innerHTML = "";
 
-    if(!jadwalKelas[k] || !jadwalKelas[k][h]) {
-        out.innerHTML = "<p style='text-align:center;'>Jadwal tidak tersedia.</p>";
-        return;
-    }
+    if(!jadwalKelas[k] || !jadwalKelas[k][h]) return;
 
     const sekarang = new Date();
     const jamMenitSekarang = sekarang.getHours() * 60 + sekarang.getMinutes();
@@ -86,15 +93,15 @@ function tampilkanJadwal() {
         let kodeGuru = jadwalKelas[k][h][p.i];
         let info = p.s ? p.s : (daftarGuru[kodeGuru] || "Kode " + (kodeGuru || "-"));
         
-        // Logika "SEKARANG": Aktif hanya jika hari SAMA dan jam SAMA
-        let isActive = (namaHariSekarang === h) && (() => {
+        let isActive = false;
+        if (h.toLowerCase() === namaHariSekarang.toLowerCase()) {
             const range = p.w.split('-');
             const mulai = range[0].split('.');
             const selesai = range[1].split('.');
             const m = parseInt(mulai[0]) * 60 + parseInt(mulai[1]);
             const s = parseInt(selesai[0]) * 60 + parseInt(selesai[1]);
-            return jamMenitSekarang >= m && jamMenitSekarang < s;
-        })();
+            if (jamMenitSekarang >= m && jamMenitSekarang < s) isActive = true;
+        }
 
         let cls = p.s ? "card special" : "card";
         if (isActive) cls += " active-now";
@@ -105,6 +112,12 @@ function tampilkanJadwal() {
                 <div class="desc">${info} ${isActive ? "<br><small style='color:#00ff00'>Sedang Berlangsung</small>" : ""}</div>
             </div>`;
     });
+}
+
+function toggleTheme() {
+    const isChecked = document.getElementById('checkbox').checked;
+    if (isChecked) document.documentElement.setAttribute('data-theme', 'light');
+    else document.documentElement.removeAttribute('data-theme');
 }
 
 window.onload = loadData;
