@@ -44,46 +44,48 @@ function initDropdown() {
 
 function tampilkanJadwal() {
     const k = document.getElementById('kelas').value; 
-    const h = document.getElementById('hari').value; 
+    const h = document.getElementById('hari').value; // Ini hari yang dipilih di dropdown
     const out = document.getElementById('output');
     out.innerHTML = "";
     
-    if(!jadwalKelas[k] || !jadwalKelas[k][h]) return;
-
-    // 1. Ambil data waktu sekarang
-const sekarang = new Date();
-const jamMenitSekarang = sekarang.getHours() * 60 + sekarang.getMinutes();
-
-// 2. Ambil nama hari sekarang dalam Bahasa Indonesia
-const daftarHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-const namaHariSekarang = daftarHari[sekarang.getDay()];
-
-// 3. Ambil hari yang dipilih user di dropdown
-const hariDipilih = document.getElementById('hari').value;
-
-jamConfig[h].forEach(p => {
-    // ... kode info guru ...
-
-    // Logika Deteksi Pelajaran Aktif (DIFILTER BERDASARKAN HARI)
-    let isActive = false;
-    
-    // CEK: Apakah jamnya masuk DAN harinya harus SAMA dengan hari ini
-    if (namaHariSekarang === hariDipilih) {
-        const range = p.w.split('-');
-        const mulai = range[0].split('.');
-        const selesai = range[1].split('.');
-        
-        const menitMulai = parseInt(mulai[0]) * 60 + parseInt(mulai[1]);
-        const menitSelesai = parseInt(selesai[0]) * 60 + parseInt(selesai[1]);
-
-        if (jamMenitSekarang >= menitMulai && jamMenitSekarang < menitSelesai) {
-            isActive = true;
-        }
+    // Validasi data: Kalau data jadwal atau jamConfig hari tersebut tidak ada, berhenti
+    if(!jadwalKelas[k] || !jadwalKelas[k][h] || !jamConfig[h]) {
+        out.innerHTML = "<p style='text-align:center;'>Jadwal tidak ditemukan.</p>";
+        return;
     }
 
+    // --- LOGIKA FILTER HARI ---
+    const sekarang = new Date();
+    const jamMenitSekarang = sekarang.getHours() * 60 + sekarang.getMinutes();
+    
+    // Nama hari di daftarHari harus SAMA PERSIS dengan value di HTML kamu (Senin, Selasa, dst)
+    const daftarHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const namaHariSekarang = daftarHari[sekarang.getDay()];
+    // ---------------------------
 
+    jamConfig[h].forEach(p => {
+        let kodeGuru = jadwalKelas[k][h][p.i];
+        let info = p.s ? p.s : (daftarGuru[kodeGuru] || "Kode " + (kodeGuru || "-"));
+        
+        let isActive = false;
+        
+        // Cek apakah hari di HP sama dengan hari yang dipilih di dropdown
+        if (namaHariSekarang === h) { 
+            const range = p.w.split('-');
+            const mulai = range[0].split('.');
+            const selesai = range[1].split('.');
+            
+            const menitMulai = parseInt(mulai[0]) * 60 + parseInt(mulai[1]);
+            const menitSelesai = parseInt(selesai[0]) * 60 + parseInt(selesai[1]);
+
+            if (jamMenitSekarang >= menitMulai && jamMenitSekarang < menitSelesai) {
+                isActive = true;
+            }
+        }
+
+        // Tentukan Class Card
         let cls = p.s ? "card special" : "card";
-        if (isActive) cls += " active-now"; // Tambah class khusus jika sedang berlangsung
+        if (isActive) cls += " active-now";
 
         out.innerHTML += `
             <div class="${cls}">
@@ -97,7 +99,6 @@ jamConfig[h].forEach(p => {
             </div>`;
     });
 }
-
 
 // Fitur Rahasia
 function rahasia() {
