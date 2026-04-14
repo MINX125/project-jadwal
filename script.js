@@ -2,7 +2,6 @@ let daftarGuru = {};
 let jadwalKelas = {};
 let jamConfig = {};
 
-// Fungsi untuk memuat data JSON dari folder file-file
 async function loadData() {
     try {
         const guruRes = await fetch('file-file/guru.json');
@@ -10,7 +9,6 @@ async function loadData() {
         const jadwalRes = await fetch('file-file/jadwal.json');
         jadwalKelas = await jadwalRes.json();
         
-        // Konfigurasi Jam Pelajaran SMPN 1 Diwek
         jamConfig = {
             "Senin": [
                 {w:"07.00-08.00", s:"UPACARA"},
@@ -53,9 +51,7 @@ async function loadData() {
                 {w:"12.30-13.10", i:5}, {w:"13.10-13.50", i:6}
             ]
         };
-    } catch (e) {
-        console.error("Gagal memuat data JSON. Pastikan file ada di folder file-file/");
-    }
+    } catch (e) { console.error("Gagal load data"); }
 }
 
 function tampilkanJadwal() {
@@ -64,9 +60,11 @@ function tampilkanJadwal() {
     const out = document.getElementById('output');
     out.innerHTML = "";
 
-    if(!jadwalKelas[k] || !jadwalKelas[k][h] || !jamConfig[h]) return;
+    if(!jadwalKelas[k] || !jadwalKelas[k][h]) {
+        out.innerHTML = "<p style='text-align:center;'>Jadwal tidak tersedia.</p>";
+        return;
+    }
 
-    // Logika Waktu & Filter Hari
     const sekarang = new Date();
     const jamMenitSekarang = sekarang.getHours() * 60 + sekarang.getMinutes();
     const daftarHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -74,55 +72,27 @@ function tampilkanJadwal() {
 
     jamConfig[h].forEach(p => {
         let kodeGuru = jadwalKelas[k][h][p.i];
-        let info = "";
-
-        // Penanganan Teks Khusus/Special
-        if (p.s) {
-            info = p.s;
-        } else {
-            info = daftarGuru[kodeGuru] || "Kode " + (kodeGuru || "-");
-        }
-
-        // Cek Status Aktif (Hanya jika hari di HP sama dengan hari yang dipilih)
-        let isActive = false;
-        if (namaHariSekarang === h) {
+        let info = p.s ? p.s : (daftarGuru[kodeGuru] || "Kode " + (kodeGuru || "-"));
+        
+        // Logika "SEKARANG": Aktif hanya jika hari SAMA dan jam SAMA
+        let isActive = (namaHariSekarang === h) && (() => {
             const range = p.w.split('-');
             const mulai = range[0].split('.');
             const selesai = range[1].split('.');
-            
-            const menitMulai = parseInt(mulai[0]) * 60 + parseInt(mulai[1]);
-            const menitSelesai = parseInt(selesai[0]) * 60 + parseInt(selesai[1]);
+            const m = parseInt(mulai[0]) * 60 + parseInt(mulai[1]);
+            const s = parseInt(selesai[0]) * 60 + parseInt(selesai[1]);
+            return jamMenitSekarang >= m && jamMenitSekarang < s;
+        })();
 
-            if (jamMenitSekarang >= menitMulai && jamMenitSekarang < menitSelesai) {
-                isActive = true;
-            }
-        }
-
-        // Tentukan Class CSS (Special = Emas, Active = Hijau)
         let cls = p.s ? "card special" : "card";
         if (isActive) cls += " active-now";
 
         out.innerHTML += `
             <div class="${cls}">
-                <div class="time">
-                    ${isActive ? "<b>● SEKARANG</b>" : p.w}
-                </div>
-                <div class="desc">
-                    ${info}
-                    ${isActive ? "<br><small style='color:#00ff00'>Sedang Berlangsung</small>" : ""}
-                </div>
+                <div class="time">${isActive ? "<b>● SEKARANG</b>" : p.w}</div>
+                <div class="desc">${info} ${isActive ? "<br><small style='color:#00ff00'>Sedang Berlangsung</small>" : ""}</div>
             </div>`;
     });
 }
 
-function toggleTheme() {
-    const isChecked = document.getElementById('checkbox').checked;
-    if (isChecked) {
-        document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-        document.documentElement.removeAttribute('data-theme');
-    }
-}
-
-// Jalankan loadData saat halaman dibuka
 window.onload = loadData;
