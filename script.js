@@ -89,10 +89,24 @@ function tampilkanJadwal() {
     const daftarHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
     const namaHariSekarang = daftarHari[sekarang.getDay()];
 
-    jamConfig[h].forEach(p => {
+        jamConfig[h].forEach((p, index) => {
         let kodeGuru = jadwalKelas[k][h][p.i];
-        let info = p.s ? p.s : (daftarGuru[kodeGuru] || "Kode " + (kodeGuru || "-"));
-        
+        let info = "";
+
+        // 1. Cek dulu apakah ini jam Spesial (Istirahat/Dhuha)
+        if (p.s) {
+            info = p.s;
+        } 
+        // 2. Logika OTOMATIS KOKURIKULER (Rabu, Kamis, Jumat)
+        else if ((h === "Rabu" || h === "Kamis" || h === "Jumat") && index >= jamConfig[h].length - 2) {
+            info = "KOKURIKULER";
+        }
+        // 3. Kalau bukan spesial & bukan kokurikuler, baru ambil nama guru
+        else {
+            info = daftarGuru[kodeGuru] || "Kode " + (kodeGuru || "-");
+        }
+
+        // --- Sisanya ke bawah (isActive, cls, innerHTML) tetap sama ---
         let isActive = false;
         if (h.toLowerCase() === namaHariSekarang.toLowerCase()) {
             const range = p.w.split('-');
@@ -103,7 +117,7 @@ function tampilkanJadwal() {
             if (jamMenitSekarang >= m && jamMenitSekarang < s) isActive = true;
         }
 
-        let cls = p.s ? "card special" : "card";
+        let cls = (p.s || info === "KOKURIKULER") ? "card special" : "card";
         if (isActive) cls += " active-now";
 
         out.innerHTML += `
