@@ -4,9 +4,9 @@ let jamConfig = {};
 
 async function loadData() {
     try {
-        const guruRes = await fetch('file/guru.json');
+        const guruRes = await fetch('/file/guru.json');
         daftarGuru = await guruRes.json();
-        const jadwalRes = await fetch('file/jadwal.json');
+        const jadwalRes = await fetch('/file/jadwal.json');
         jadwalKelas = await jadwalRes.json();
         
         jamConfig = {
